@@ -35,6 +35,8 @@ Ok, ready?  Let's go.
 
 In app.js, the "oauth_timeout" is currently set for the default settings.  This needs to be shorter than the OAuth timeout for your user for the refresh loop to work.  You can change the code or set a config var for this.
 
+If you have problems calling the EchoCaseSearch or EchoCaseControl URIs (getting URL not found error), check to see if your Salesforce org has a namespace.  If the org has a namespace, you will need to update all occurrences of uri:'EchoCaseControl' and uri:'EchoCaseSearch' with uri:'<your_namespace>/EchoCaseControl' and uri:'<your_namespace>/EchoCaseSearch'.
+
 Deploy the new app with *git push heroku master*.
 
 **Step 4**: For any Salesforce instance you want to run Echo Case Control, add the [Echo Case Control](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t37000000ANA4) unmanaged packaged.  This adds special REST endpoints, a Custom Object and a couple of triggers.  It's pretty lightweight, has some decent unit tests and shouldn't conflict with non-Echo functionality.
