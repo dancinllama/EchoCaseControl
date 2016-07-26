@@ -70,13 +70,13 @@ function PleaseWait(req,res,intent) {
 }
 
 function DaysUntilDreamforce(req,res,intent){
-  var today = new Date();
+  /*var today = new Date();
   var dreamforce = new Date("October 4, 2016");
   var timeLeft = (BigDay.getTime() - today.getTime());
   var msPerDay = 24 * 60 * 60 * 1000;
   var daysLeft = timeLeft / msPerDay;
-  var response = Math.floor(daysLeft);
-  send_alexa_response(res,'There are ' + response + ' days left until Dreamforce','Is it Dreamforce Yet','Days Until Dreamforce','Success',false);
+  var response = Math.floor(daysLeft);*/
+  send_alexa_response(res,'Testy Test.','Is it Dreamforce Yet','Is it Dreamforce Yet','Success',false);
 }
 
 function GetCurrentCase(req,res,intent) {
