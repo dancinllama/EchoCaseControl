@@ -76,7 +76,7 @@ function DaysUntilDreamforce(req,res,intent){
   var msPerDay = 24 * 60 * 60 * 1000;
   var daysLeft = timeLeft / msPerDay;
   var response = Math.floor(daysLeft);
-  send_alexa_response(res,'There are ' + response + ' days left until Dreamforce.','Is it Dreamforce Yet','Is it Dreamforce Yet','Success',false);
+  send_alexa_response(res,'There are ' + response + ' days left until Dreamforce.','Salesforce','Is it Dreamforce Yet','Success',false);
 }
 
 function GetCurrentCase(req,res,intent) {
