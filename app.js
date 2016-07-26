@@ -2,7 +2,7 @@
 var port = process.env.PORT || 8080;
 var clientId = '3MVG9yZ.WNe6byQAPui.Wyc_IEnEhHocuhGmkGC5wkwLlTYTbGl8M_f8l29.tVxzGmxBBIsNPjvXa3xtabzGi';
 var clientSecret = '1029919614556369973';
-var redirectURI = '://pitangui.amazon.com/spa/skill/account-linking-status.html?vendorId=MCF5CMGZ1RWLL';
+var redirectURI = 'https://pitangui.amazon.com/spa/skill/account-linking-status.html?vendorId=MCF5CMGZ1RWLL';
 var API = process.env.API || 'v37.0';
 var oauth_timeout = process.env.oauth_timeout || 5400;
 var DEBUG_ON = process.env.DEBUG_ON || true;
