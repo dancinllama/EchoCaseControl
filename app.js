@@ -75,7 +75,7 @@ function DaysUntilDreamforce(req,res,intent){
   var timeLeft = (dreamforce.getTime() - today.getTime());
   var msPerDay = 24 * 60 * 60 * 1000;
   var daysLeft = timeLeft / msPerDay;
-  var response = Math.floor(daysLeft);
+  var response = Math.ceil(daysLeft);
   send_alexa_response(res,'There are ' + response + ' days left until Dreamforce.','Salesforce','Is it Dreamforce Yet','Success',false);
 }
 
