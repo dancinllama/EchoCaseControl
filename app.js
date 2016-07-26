@@ -1,9 +1,9 @@
 /* GLOBAL / PROCESS VARIABLES */
 var port = process.env.PORT || 8080;
-var clientId = '';
-var clientSecret = '';
-var redirectURI = '';
-var API = process.env.API || 'v32.0';
+var clientId = '3MVG9yZ.WNe6byQAPui.Wyc_IEnEhHocuhGmkGC5wkwLlTYTbGl8M_f8l29.tVxzGmxBBIsNPjvXa3xtabzGi';
+var clientSecret = '1029919614556369973';
+var redirectURI = '://pitangui.amazon.com/spa/skill/account-linking-status.html?vendorId=MCF5CMGZ1RWLL';
+var API = process.env.API || 'v37.0';
 var oauth_timeout = process.env.oauth_timeout || 5400;
 var DEBUG_ON = process.env.DEBUG_ON || true;
 
@@ -63,9 +63,20 @@ intent_functions['GetLatestCases'] = GetLatestCases;
 intent_functions['OpenCase'] = OpenCase;
 intent_functions['UpdateCase'] = UpdateCase;
 intent_functions['AddPost'] = AddPost;
+intent_functions['DaysUntilDreamforce'] = DaysUntilDreamforce;
 
 function PleaseWait(req,res,intent) {
   send_alexa_response(res, 'Waiting', 'Salesforce', '...', 'Waiting', false);
+}
+
+function DaysUntilDreamforce(req,res,intent){
+  var today = new Date();
+  var dreamforce = new Date("October 4, 2016");
+  var timeLeft = (BigDay.getTime() - today.getTime());
+  var msPerDay = 24 * 60 * 60 * 1000;
+  var daysLeft = timeLeft / msPerDay;
+  var response = Math.floor(daysLeft);
+  send_alexa_response(res,'There are ' + response + ' days left until Dreamforce','Is it Dreamforce Yet','Days Until Dreamforce','Success',false);
 }
 
 function GetCurrentCase(req,res,intent) {
