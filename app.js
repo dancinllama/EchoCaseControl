@@ -108,7 +108,7 @@ function GetCurrentCase(req,res,intent) {
 
 
 function GetLatestCases(req,res,intent) {
-	org.apexRest({oauth:intent.oauth, uri:'/timesheet__EchoCaseSearch'},
+	org.apexRest({oauth:intent.oauth, uri:'/timesheet/EchoCaseSearch'},
 		function(err,result) {
 			if(err) {
               console.log(err);
