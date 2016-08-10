@@ -1,13 +1,15 @@
 /* GLOBAL / PROCESS VARIABLES */
 var port = process.env.PORT || 8080;
-var clientId = '3MVG9yZ.WNe6byQAPui.Wyc_IEnEhHocuhGmkGC5wkwLlTYTbGl8M_f8l29.tVxzGmxBBIsNPjvXa3xtabzGi';
-var clientSecret = '1029919614556369973';
-var redirectURI = 'https://pitangui.amazon.com/spa/skill/account-linking-status.html?vendorId=MCF5CMGZ1RWLL';
-var API = process.env.API || 'v37.0';
+var clientId = '';
+var clientSecret = '';
+var redirectURI = '';
+var API = process.env.API || 'v32.0';
 var oauth_timeout = process.env.oauth_timeout || 5400;
 var DEBUG_ON = process.env.DEBUG_ON || true;
 
 /* REQUIRED PACKAGES */
+var GoogleMapsAPI = require('./lib/GoogleMapsAPI');
+
 
 //alexa response transform
 var alexa = require('alexa-nodekit');
@@ -36,10 +38,36 @@ var org = nforce.createConnection({
   plugins: ['chatter']
 });
 
+/* Google Maps API stuffs */
+var publicConfig = {
+  key: 'AIzaSyCaJh09vEh-eKkXiPXAuloUXzBZqCaD4DY',
+  stagger_time:       1000, // for elevationPath
+  encode_polylines:   false,
+  secure:             true, // use https
+};
+var gmAPI = new GoogleMapsAPI(publicConfig);
+
+
 /* SETUP ROUTES */
 
 app.get('/', function (req, res) {
   res.jsonp({status: 'running'});
+});
+
+app.get('/echo',function(req,res){
+  // geocode API
+  var geocodeParams = {
+    "origins": "41.43206,-81.38992|-33.86748,151.20699"
+  };
+
+  gmAPI.distance({"origins" : "41.43206,-81.38992","destinations":"44.038849,-92.421001"}, function(err, result){
+    debugger;
+    console.log(result.rows[0].elements[0].duration);
+    console.log(err);
+  });
+  debugger;
+  
+  console.log("WARN: Get not supported");
 });
 
 app.post('/echo', function (req, res) {
@@ -63,20 +91,10 @@ intent_functions['GetLatestCases'] = GetLatestCases;
 intent_functions['OpenCase'] = OpenCase;
 intent_functions['UpdateCase'] = UpdateCase;
 intent_functions['AddPost'] = AddPost;
-intent_functions['DaysUntilDreamforce'] = DaysUntilDreamforce;
+intent_functions['GetNextEvent'] = GetNextEvent;
 
 function PleaseWait(req,res,intent) {
   send_alexa_response(res, 'Waiting', 'Salesforce', '...', 'Waiting', false);
-}
-
-function DaysUntilDreamforce(req,res,intent){
-  var today = new Date();
-  var dreamforce = new Date("October 4, 2016");
-  var timeLeft = (dreamforce.getTime() - today.getTime());
-  var msPerDay = 24 * 60 * 60 * 1000;
-  var daysLeft = timeLeft / msPerDay;
-  var response = Math.ceil(daysLeft);
-  send_alexa_response(res,'There are ' + response + ' days left until Dreamforce.','Salesforce','Is it Dreamforce Yet','Success',false);
 }
 
 function GetCurrentCase(req,res,intent) {
@@ -106,9 +124,54 @@ function GetCurrentCase(req,res,intent) {
 		});
 }
 
+function GetNextEvent(req,res,intent) {
+        org.apexRest({oauth:intent.oauth, uri:'EchoEvents'},
+                function(err,result) {
+                        if(err) {
+              console.log(err);
+              send_alexa_error(res,'An error occured checking for the next event: '+err);
+            }
+            else {
+                console.log(result);
+                if(typeof result !== 'undefined'){
+                      	var parms = {"origins" : result.Owner_Lat_Long__c,"destinations" : result.Account.Lat_Long__c};
+
+                        var thatResult = result;
+  			gmAPI.distance(parms, function(err, mapResult){
+    				console.log(err);
+                                console.log(thatResult);
+
+				console.log('duration: ' + duration);
+                                var departureDate = new Date(thatResult.StartDateTime);
+                                departureDate.setSeconds(departureDate.getSeconds()-duration.value);
+                                console.log('departure date: ' + departureDate);
+
+                                var currentDate = new Date();
+
+                                var diffTime = departureDate.getTime() - currentDate.getTime();
+
+                                console.log('Diff time: ' + diffTime);
+
+			        var differenceHours = (diffTime / (1000 * 3600));  
+
+				console.log('difference hours: ' + differenceHours);
+
+                                var differenceMinutes = Math.ceil((diffTime / (1000 * 60)) - (differenceHours * 60));
+				console.log('difference minutes: ' + differenceMinutes);
+
+				var speech = "Your next meeting is " + duration.text + " away.  You will need to leave in " + differenceHours + " hours and " + differenceMinutes + " minutes."
+
+				send_alexa_response(res, speech, 'Salesforce', 'Get Next Event', 'Success', false); 
+  			});
+		}
+            }
+
+                });
+}
+
 
 function GetLatestCases(req,res,intent) {
-	org.apexRest({oauth:intent.oauth, uri:'/timesheet/EchoCaseSearch'},
+	org.apexRest({oauth:intent.oauth, uri:'EchoCaseSearch'},
 		function(err,result) {
 			if(err) {
               console.log(err);
@@ -118,7 +181,7 @@ function GetLatestCases(req,res,intent) {
             	var speech = "Here are your latest cases. ";
             	for(var i = 0; i < result.length; i++) {
                       speech += 'Case Number ';
-                      speech += i+1;
+                       speech += i+1;
                       speech += '. .';
                       speech += result[i].Subject__c;
                       speech += '. .';

@@ -2,7 +2,11 @@
   "name": "heroku-echo-demo",
   "version": "0.0.1",
   "engines": {
-    "node": "*"
+    "node": ">=0.3.6"
+  },
+  "devDependencies": {
+    "mocha": "^2.4.5",
+    "should": "^8.2.2"
   },
   "dependencies": {
     "alexa-nodekit": "^1.0.2",
@@ -10,6 +14,10 @@
     "express": "^4.13.1",
     "nforce": "^1.2.0",
     "nforce-chatter": "*",
-    "sfdc-oauth-amazon-express": "*"
+    "sfdc-oauth-amazon-express": "*",
+    "check-types": "~1.3.2",
+    "qs": "^4.0.0",
+    "request": "~2.44.0",
+    "waitress": ">=0.0.2"
   }
 }
