@@ -55,19 +55,49 @@ app.get('/', function (req, res) {
 });
 
 app.get('/echo',function(req,res){
-  // geocode API
-  var geocodeParams = {
-    "origins": "41.43206,-81.38992|-33.86748,151.20699"
-  };
+org.apexRest({oauth:intent.oauth, uri:'/timesheet/EchoEvents'},
+                function(err,result) {
+                        if(err) {
+              console.log(err);
+              send_alexa_error(res,'An error occured checking for the next event: '+err);
+            }
+            else {
+                console.log('EchoEvents rest service result: ' + result);
+                if(typeof result !== 'undefined'){
+                        var parms = {"origins" : result.timesheet__Owner_Lat_Long__c,"destinations" : result.Account.timesheet__Lat_Long__c};
 
-  gmAPI.distance({"origins" : "41.43206,-81.38992","destinations":"44.038849,-92.421001"}, function(err, result){
-    debugger;
-    console.log(result.rows[0].elements[0].duration);
-    console.log(err);
-  });
-  debugger;
-  
-  console.log("WARN: Get not supported");
+                        console.log("parms: " + parms);
+                        var thatResult = result;
+                        gmAPI.distance(parms, function(err, mapResult){
+                                console.log(err);
+                                console.log('rest service result inside of google maps callback: ' + thatResult);
+
+                                console.log('duration: ' + duration);
+                                var departureDate = new Date(thatResult.StartDateTime);
+                                departureDate.setSeconds(departureDate.getSeconds()-duration.value);
+                                console.log('departure date: ' + departureDate);
+
+                                var currentDate = new Date();
+
+                                var diffTime = departureDate.getTime() - currentDate.getTime();
+
+                                console.log('Diff time: ' + diffTime);
+
+                                var differenceHours = (diffTime / (1000 * 3600));
+
+                                console.log('difference hours: ' + differenceHours);
+
+                                var differenceMinutes = Math.ceil((diffTime / (1000 * 60)) - (differenceHours * 60));
+                                console.log('difference minutes: ' + differenceMinutes);
+
+                                var speech = "Your next meeting is " + duration.text + " away.  You will need to leave in " + differenceHours + " hours and " + differenceMinutes + " minutes."
+
+                                send_alexa_response(res, speech, 'Salesforce', 'Get Next Event', 'Success', false);
+                        });
+                }
+            }
+
+        });
 });
 
 app.post('/echo', function (req, res) {
