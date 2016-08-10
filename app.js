@@ -163,10 +163,11 @@ function GetNextEvent(req,res,intent) {
               send_alexa_error(res,'An error occured checking for the next event: '+err);
             }
             else {
-                console.log(result);
+                console.log('REST SERVICE RESULT: ' + result);
                 if(typeof result !== 'undefined'){
-                      	var parms = {"origins" : result.Owner_Lat_Long__c,"destinations" : result.Account.Lat_Long__c};
-
+                      	var parms = {"origins" : result.timesheet__Owner_Lat_Long__c,"destinations" : result.Account.timesheet__Lat_Long__c};
+                        console.log('GOOGLE MAPS parms: ' + parms);
+         
                         var thatResult = result;
   			gmAPI.distance(parms, function(err, mapResult){
     				console.log(err);
