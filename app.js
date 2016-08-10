@@ -166,14 +166,18 @@ function GetNextEvent(req,res,intent) {
                 console.log('REST SERVICE RESULT: ' + result);
                 if(typeof result !== 'undefined'){
                       	var parms = {"origins" : result.timesheet__Owner_Lat_Long__c,"destinations" : result.Account.timesheet__Lat_Long__c};
-                        console.log('GOOGLE MAPS parms: ' + parms);
-         
+                        console.log('GOOGLE MAPS parms origins: ' + parms["origins"]);
+                        console.log('GOOGLE MAPS parms destinations: ' + parms["destinations"]);         
+
                         var thatResult = result;
   			gmAPI.distance(parms, function(err, mapResult){
     				console.log(err);
-                                console.log(thatResult);
+                                console.log('THAT RESULT: ' + thatResult);
 
+                                var duration = mapResult.rows[0].elements[0].duration;
 				console.log('duration: ' + duration);
+                                console.log('duration value: ' + duration.value);
+                                console.log('duration 
                                 var departureDate = new Date(thatResult.StartDateTime);
                                 departureDate.setSeconds(departureDate.getSeconds()-duration.value);
                                 console.log('departure date: ' + departureDate);
