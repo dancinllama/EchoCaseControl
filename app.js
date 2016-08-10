@@ -177,7 +177,6 @@ function GetNextEvent(req,res,intent) {
                                 var duration = mapResult.rows[0].elements[0].duration;
 				console.log('duration: ' + duration);
                                 console.log('duration value: ' + duration.value);
-                                console.log('duration 
                                 var departureDate = new Date(thatResult.StartDateTime);
                                 departureDate.setSeconds(departureDate.getSeconds()-duration.value);
                                 console.log('departure date: ' + departureDate);
