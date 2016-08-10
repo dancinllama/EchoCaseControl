@@ -72,7 +72,8 @@ org.apexRest({oauth:intent.oauth, uri:'/timesheet/EchoEvents'},
                                 console.log(err);
                                 console.log('rest service result inside of google maps callback: ' + thatResult);
 
-                                console.log('duration: ' + duration);
+                                console.log('test');
+				console.log('duration: ' + duration);
                                 var departureDate = new Date(thatResult.StartDateTime);
                                 departureDate.setSeconds(departureDate.getSeconds()-duration.value);
                                 console.log('departure date: ' + departureDate);
