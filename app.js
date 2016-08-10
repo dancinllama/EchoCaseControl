@@ -188,7 +188,7 @@ function GetNextEvent(req,res,intent) {
 
                                 console.log('Diff time: ' + diffTime);
 
-			        var differenceHours = Math.ceil(diffTime / (1000 * 3600));  
+			        var differenceHours = Math.floor(diffTime / (1000 * 3600));  
 
 				console.log('difference hours: ' + differenceHours);
 
