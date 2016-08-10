@@ -1,9 +1,9 @@
 /* GLOBAL / PROCESS VARIABLES */
 var port = process.env.PORT || 8080;
-var clientId = '';
-var clientSecret = '';
-var redirectURI = '';
-var API = process.env.API || 'v32.0';
+var clientId = '3MVG9yZ.WNe6byQAPui.Wyc_IEnEhHocuhGmkGC5wkwLlTYTbGl8M_f8l29.tVxzGmxBBIsNPjvXa3xtabzGi';
+var clientSecret = '1029919614556369973';
+var redirectURI = 'https://pitangui.amazon.com/spa/skill/account-linking-status.html?vendorId=MCF5CMGZ1RWLL';
+var API = process.env.API || 'v37.0';
 var oauth_timeout = process.env.oauth_timeout || 5400;
 var DEBUG_ON = process.env.DEBUG_ON || true;
 
@@ -91,6 +91,7 @@ intent_functions['GetLatestCases'] = GetLatestCases;
 intent_functions['OpenCase'] = OpenCase;
 intent_functions['UpdateCase'] = UpdateCase;
 intent_functions['AddPost'] = AddPost;
+intent_functions['DaysUntilDreamforce'] = DaysUntilDreamforce;
 intent_functions['GetNextEvent'] = GetNextEvent;
 
 function PleaseWait(req,res,intent) {
@@ -98,7 +99,7 @@ function PleaseWait(req,res,intent) {
 }
 
 function GetCurrentCase(req,res,intent) {
-	org.apexRest({oauth:intent.oauth, uri:'EchoCaseControl'},
+	org.apexRest({oauth:intent.oauth, uri:'/timesheet/EchoCaseControl'},
 		function(err,result) {
 			if(err) {
               console.log(err);
@@ -125,7 +126,7 @@ function GetCurrentCase(req,res,intent) {
 }
 
 function GetNextEvent(req,res,intent) {
-        org.apexRest({oauth:intent.oauth, uri:'EchoEvents'},
+        org.apexRest({oauth:intent.oauth, uri:'/timesheet/EchoEvents'},
                 function(err,result) {
                         if(err) {
               console.log(err);
@@ -171,7 +172,7 @@ function GetNextEvent(req,res,intent) {
 
 
 function GetLatestCases(req,res,intent) {
-	org.apexRest({oauth:intent.oauth, uri:'EchoCaseSearch'},
+	org.apexRest({oauth:intent.oauth, uri:'/timesheet/EchoCaseSearch'},
 		function(err,result) {
 			if(err) {
               console.log(err);
@@ -202,7 +203,7 @@ function UpdateCase(req,res,intent) {
     if(update == 'Close') { update = 'Closed'; } //really, Alexa?
 
     if(update == 'Low' || update == 'Medium' || update == 'High') {
-            org.apexRest({oauth:intent.oauth, uri:'EchoCaseControl',method:'POST',body:'{"priority":"'+update+'"}'},
+            org.apexRest({oauth:intent.oauth, uri:'/timesheet/EchoCaseControl',method:'POST',body:'{"priority":"'+update+'"}'},
             	function(err,result) {
 					if(err) {
 		              console.log(err);
@@ -218,7 +219,7 @@ function UpdateCase(req,res,intent) {
      }  
 
     else if(update == 'Closed' || update == 'New' || update == 'Working' || update == 'Escalated') {
-              org.apexRest({oauth:intent.oauth, uri:'EchoCaseControl',method:'POST',body:'{"status":"'+update+'"}'},
+              org.apexRest({oauth:intent.oauth, uri:'/timesheet/EchoCaseControl',method:'POST',body:'{"status":"'+update+'"}'},
             	function(err,result) {
 					if(err) {
 		              console.log(err);
@@ -243,7 +244,7 @@ function OpenCase(req,res,intent) {
 	var number = intent.slots.number.value;
 	number = number.toString();
 	console.log("CASE IDENTIFIER>>>>>"+number);
-    org.apexRest({oauth:intent.oauth, uri:'EchoCaseSearch',method:'POST',body:'{"CaseIdentifier":"'+number+'"}'},
+    org.apexRest({oauth:intent.oauth, uri:'/timesheet/EchoCaseSearch',method:'POST',body:'{"CaseIdentifier":"'+number+'"}'},
 		function(err,result) {
 			if(err) {
               console.log(err);
@@ -257,13 +258,21 @@ function OpenCase(req,res,intent) {
 		});
 }
 
-
+function DaysUntilDreamforce(req,res,intent){
+   var today = new Date();
+   var dreamforce = new Date("October 4, 2016");
+   var timeLeft = (dreamforce.getTime() - today.getTime());
+   var msPerDay = 24 * 60 * 60 * 1000;
+   var daysLeft = timeLeft / msPerDay;
+   var response = Math.ceil(daysLeft);
+   send_alexa_response(res,'There are ' + response + ' days left until Dreamforce.','Salesforce','Is it Dreamforce Yet','Success',false);
+}
 
 
 function AddPost(req,res,intent) {
 		var post = intent.slots.post.value;
     	console.log("CHATTER POST>>>>"+post);
-    	org.apexRest({oauth:intent.oauth, uri:'EchoCaseSearch',method:'POST',body:'{"CaseIdentifier":null}'},
+    	org.apexRest({oauth:intent.oauth, uri:'/timesheet/EchoCaseSearch',method:'POST',body:'{"CaseIdentifier":null}'},
 		function(err,result) {
 			if(err) {
               console.log(err);
