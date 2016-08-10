@@ -84,7 +84,7 @@ org.apexRest({oauth:intent.oauth, uri:'/timesheet/EchoEvents'},
 
                                 console.log('Diff time: ' + diffTime);
 
-                                var differenceHours = (diffTime / (1000 * 3600));
+                                var differenceHours = Math.ceil(diffTime / (1000 * 3600));
 
                                 console.log('difference hours: ' + differenceHours);
 
