@@ -1,3 +1,7 @@
+DaysUntilDreamforce How many days until Dreamforce
+DaysUntilDreamforce How many days until DF
+DaysUntilDreamforce Is It Dreamforce Yet
+
 PleaseWait wait
 
 GetCurrentCase open current case
@@ -7,6 +11,10 @@ GetCurrentCase more information
 
 GetLatestCases get my latest cases
 GetLatestCases get latest cases
+
+GetNextEvent get next event
+GetNextEvent when do I have to leave for my next meeting
+GetNextEvent when is my next meeting
 
 OpenCase open case {one|number}
 OpenCase open case {zero zero zero zero one zero zero zero|number}
@@ -56,3 +64,5 @@ UpdateCase update case to {closed|update}
 
 UpdateCase update status {escalated|update}
 UpdateCase update status to {escalated|update}
+
+

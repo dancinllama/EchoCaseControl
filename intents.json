@@ -1,7 +1,15 @@
 {
-  "intents": [
+    "intents": [
+    {
+      "intent": "DaysUntilDreamforce",
+      "slots":[]
+    },
     {
       "intent": "GetCurrentCase",
+      "slots": []
+    },
+    {
+      "intent": "GetNextEvent",
       "slots": []
     },
     {
@@ -29,3 +37,5 @@
      "intent": "PleaseWait",
       "slots": []
     }
+  ]
+}
