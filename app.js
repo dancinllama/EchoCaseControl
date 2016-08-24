@@ -1,8 +1,8 @@
 /* GLOBAL / PROCESS VARIABLES */
 var port = process.env.PORT || 8080;
-var clientId = '3MVG9yZ.WNe6byQAPui.Wyc_IEnEhHocuhGmkGC5wkwLlTYTbGl8M_f8l29.tVxzGmxBBIsNPjvXa3xtabzGi';
-var clientSecret = '1029919614556369973';
-var redirectURI = 'https://pitangui.amazon.com/spa/skill/account-linking-status.html?vendorId=MCF5CMGZ1RWLL';
+var clientId = 'XXXX';
+var clientSecret = 'XXXX';
+var redirectURI = 'https://pitangui.amazon.com/spa/skill/account-linking-status.html?vendorId=XXXX';
 var API = process.env.API || 'v37.0';
 var oauth_timeout = process.env.oauth_timeout || 5400;
 var DEBUG_ON = process.env.DEBUG_ON || true;
@@ -40,7 +40,7 @@ var org = nforce.createConnection({
 
 /* Google Maps API stuffs */
 var publicConfig = {
-  key: 'AIzaSyCaJh09vEh-eKkXiPXAuloUXzBZqCaD4DY',
+  key: 'XXXX',
   stagger_time:       1000, // for elevationPath
   encode_polylines:   false,
   secure:             true, // use https
@@ -55,7 +55,7 @@ app.get('/', function (req, res) {
 });
 
 app.get('/echo',function(req,res){
-org.apexRest({oauth:intent.oauth, uri:'/timesheet/EchoEvents'},
+org.apexRest({oauth:intent.oauth, uri:'/someNamespace/EchoEvents'},
                 function(err,result) {
                         if(err) {
               console.log(err);
@@ -129,7 +129,7 @@ function PleaseWait(req,res,intent) {
 }
 
 function GetCurrentCase(req,res,intent) {
-	org.apexRest({oauth:intent.oauth, uri:'/timesheet/EchoCaseControl'},
+	org.apexRest({oauth:intent.oauth, uri:'/someNamespace/EchoCaseControl'},
 		function(err,result) {
 			if(err) {
               console.log(err);
@@ -156,7 +156,7 @@ function GetCurrentCase(req,res,intent) {
 }
 
 function GetNextEvent(req,res,intent) {
-        org.apexRest({oauth:intent.oauth, uri:'/timesheet/EchoEvents'},
+        org.apexRest({oauth:intent.oauth, uri:'/somenamespace/EchoEvents'},
                 function(err,result) {
                         if(err) {
               console.log(err);
@@ -206,7 +206,7 @@ function GetNextEvent(req,res,intent) {
 
 
 function GetLatestCases(req,res,intent) {
-	org.apexRest({oauth:intent.oauth, uri:'/timesheet/EchoCaseSearch'},
+	org.apexRest({oauth:intent.oauth, uri:'/someNamespace/EchoCaseSearch'},
 		function(err,result) {
 			if(err) {
               console.log(err);
